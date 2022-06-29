@@ -11,7 +11,7 @@ public class MainMenu {
 
     public void showMainMenu() throws IOException {
         Scanner in = new Scanner(System.in);
-        System.out.println("**************************Menu***************************");
+        System.out.println("************************** Menu ***************************");
         System.out.println("1. Option 1");
         System.out.println("2. Option 2");
         System.out.println("3. Option 3");
