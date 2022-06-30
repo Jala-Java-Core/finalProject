@@ -1,11 +1,5 @@
 package models;
 
-import enums.Season;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class Schedule {
     private String schedule;
     private Content content;

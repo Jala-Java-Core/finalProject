@@ -20,6 +20,7 @@ public class ChannelPreview {
         this.nextSchedule = nextSchedule;
     }
 
+    // Setters and getters
     public long getTimeRemaining() {
         return timeRemaining;
     }

@@ -5,13 +5,13 @@ public class Content {
     private String title;
     private String summary;
 
-
     public Content(int duration, String title, String summary) {
         this.duration = duration;
         this.title = title;
         this.summary = summary;
     }
 
+    // Setters and getters
     public int getDuration() {
         return duration;
     }

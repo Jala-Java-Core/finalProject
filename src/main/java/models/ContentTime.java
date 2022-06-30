@@ -4,7 +4,6 @@ import java.time.LocalTime;
 
 public class ContentTime {
     private LocalTime startTime;
-
     private LocalTime endTime;
 
     public ContentTime(LocalTime startTime, LocalTime endTime) {
@@ -12,6 +11,7 @@ public class ContentTime {
         this.endTime = endTime;
     }
 
+    // Setters and getters
     public LocalTime getStartTime() {
         return startTime;
     }

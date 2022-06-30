@@ -35,31 +35,6 @@ public class ContentManager {
         return channel;
     }
 
-    public Schedule getSchedule(String channelName, String scheduleName) {
-        Channel channel = channels
-                .stream()
-                .filter(currChannel -> channelName.equals(currChannel.getChannel()))
-                .findAny()
-                .orElse(null);
-
-        if (channel != null) {
-            Guide guide = channel.getGuide();
-
-            if (guide != null) {
-                Schedule schedule = guide
-                        .getSchedules()
-                        .stream()
-                        .filter(currSchedule -> scheduleName.equals(currSchedule.getSchedule()))
-                        .findAny()
-                        .orElse(null);
-
-                return schedule;
-            }
-        }
-
-        return null;
-    }
-
     public Channel createChannel(String channel) {
         Channel newChannel = new Channel(channel);
         channels.add(newChannel);
@@ -124,6 +99,31 @@ public class ContentManager {
         }
 
         return false;
+    }
+
+    public Schedule getSchedule(String channelName, String scheduleName) {
+        Channel channel = channels
+                .stream()
+                .filter(currChannel -> channelName.equals(currChannel.getChannel()))
+                .findAny()
+                .orElse(null);
+
+        if (channel != null) {
+            Guide guide = channel.getGuide();
+
+            if (guide != null) {
+                Schedule schedule = guide
+                        .getSchedules()
+                        .stream()
+                        .filter(currSchedule -> scheduleName.equals(currSchedule.getSchedule()))
+                        .findAny()
+                        .orElse(null);
+
+                return schedule;
+            }
+        }
+
+        return null;
     }
 
     public Schedule createSchedule(String scheduleName, String channelName, Content content, ContentTime contentTime) {
