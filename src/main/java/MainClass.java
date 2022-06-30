@@ -7,7 +7,7 @@ import source.utility.ScheduleType;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.TreeMap;
 
 public class MainClass {
@@ -45,7 +45,7 @@ public class MainClass {
         Season seasonJune2022 = new Season("06/01/2022", "06/30/2022");
         Season seasonAnnually = new Season(ScheduleType.ANNUALLY, "06/30/2022");
 
-        ArrayList<String> datesInSchedule1 = new ArrayList<>(){};
+        LinkedHashSet<String> datesInSchedule1 = new LinkedHashSet<>(){};
         datesInSchedule1.add("06/06/2022");
         datesInSchedule1.add("06/13/2022");
         datesInSchedule1.add("06/20/2022");
@@ -57,22 +57,28 @@ public class MainClass {
         datesInSchedule1.add("06/29/2022");
 
         Guide programmedGuideMonthly = new Guide(seasonJune2022);
-        programmedGuideMonthly.createSchedule(schedule1, datesInSchedule1); // Repetition
+        programmedGuideMonthly.saveRepeatedSchedule(schedule1, datesInSchedule1);
 
         Channel geoTvChannel  = new Channel();
         geoTvChannel.createGuide(programmedGuideMonthly);
 
         Guide programmedGuideAnnually = new Guide(seasonAnnually);
-        programmedGuideAnnually.createSchedule(schedule2, DayOfWeek.MONDAY); // Recurrence
+        programmedGuideAnnually.saveRecurringSchedule(schedule2, DayOfWeek.MONDAY);
 
-        Channel sonyTabChannel  = new Channel();
+        Channel sonyTabChannel = new Channel();
         sonyTabChannel.createGuide(programmedGuideAnnually);
 
         ContentManager contentManager = new ContentManager();
         contentManager.createChannel(geoTvChannel);
         contentManager.createChannel(sonyTabChannel);
 
-        ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "11:15:00");
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "18:30:00"); // previous empty, content valid, next empty
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "15:30:00"); // previous valid, content empty, next valid
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "13:50:00"); // previous valid, content valid, next empty
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "00:50:00"); // previous empty, content valid, next empty
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "08:50:00"); // previous empty, content valid, next valid
+        // ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "11:50:00"); // previous valid, content valid, next valid
+        ContentInformation contentInformation = contentManager.preview(geoTvChannel, "06/27/2022", "23:50:00"); // previous valid, content empty, next empty
         System.out.println( "Content Title: " + contentInformation.getContent().getTitle());
         System.out.println( "Content Summary: " + contentInformation.getContent().getSummary());
         System.out.println( "Duration in Minutes: " + contentInformation.getContent().getDurationInMinutes());

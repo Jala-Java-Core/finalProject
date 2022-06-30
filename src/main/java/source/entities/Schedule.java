@@ -17,32 +17,53 @@ public class Schedule {
     }
 
     public ContentInformation getContentInformationBasedOnTime(LocalTime time) {
-        ContentInformation contentInformation = new ContentInformation();
-        LocalTime previousStartTime = null;
-        LocalTime previousEndTime = null;
 
-        for(Map.Entry<String,Content> contentBasedOnTime: getTimeTable().entrySet()) {
+        ContentInSchedule previous = null, previousToContent = null, content = null, nextToContent = null;
+
+        for (Map.Entry<String,Content> contentBasedOnTime: getTimeTable().entrySet()) {
             LocalTime startTime = LocalTime.parse(contentBasedOnTime.getKey(), DateTimeFormatter.ISO_TIME);
             LocalTime endTime = getEndTime(startTime, contentBasedOnTime.getValue());
+            ContentInSchedule current = new ContentInSchedule(startTime, endTime, contentBasedOnTime.getValue());
 
-            if (isInContentTime(time, startTime, endTime)) {
-                contentInformation.setContent(contentBasedOnTime.getValue());
-                contentInformation.setTimeRemaining(time, endTime);
+            if (isInContentTime(time, current)) {
+                content = current;
             }
 
-            if (previousStartTime != null && previousEndTime.isBefore(time) && contentInformation.getContent() == null) {
-                if(isInContentTime(startTime.minusMinutes(1), previousStartTime, previousEndTime))
-                    contentInformation.setPreviousContent(contentBasedOnTime.getValue());
-            }
+            if (previous != null) {
+                if (previous.getStartTime() != null && previous.getEndTime().isBefore(time) && content == null) {
+                    if (isInContentTime(startTime.minusMinutes(1), previous))
+                        previousToContent = current;
+                }
 
-            if (previousStartTime != null && contentInformation.getNextContent() == null && startTime.isAfter(time)) {
-                if (isInContentTime(previousEndTime.plusMinutes(1), startTime, endTime))
-                    contentInformation.setNextContent(contentBasedOnTime.getValue());
+                if (previous.getStartTime() != null && startTime.isAfter(time) && nextToContent == null) {
+                     nextToContent = current;
+                }
             }
-            previousStartTime = startTime;
-            previousEndTime = endTime;
+            previous = current;
         }
 
+        return GetContentInformation(previousToContent, content, nextToContent, time);
+    }
+
+    private ContentInformation GetContentInformation(ContentInSchedule previousToContent, ContentInSchedule content,
+                                                     ContentInSchedule nextToContent, LocalTime time) {
+        ContentInformation contentInformation = new ContentInformation();
+        if (content != null && content.getContent() != null) {
+            contentInformation.setContent(content.getContent());
+            contentInformation.setTimeRemaining(time, content.getEndTime());
+        }
+
+        if (content != null && content.getContent() != null && previousToContent != null && !isInContentTime(content.getStartTime().minusMinutes(1), previousToContent)) {
+            contentInformation.setPreviousContent(GetEmptyContent());
+        } else if (previousToContent != null) {
+            contentInformation.setPreviousContent(previousToContent.getContent());
+        }
+
+        if (content != null && content.getContent() != null && nextToContent != null && !isInContentTime(content.getEndTime().plusMinutes(1), nextToContent)) {
+            contentInformation.setNextContent(GetEmptyContent());
+        } else if (nextToContent != null) {
+            contentInformation.setNextContent(nextToContent.getContent());
+        }
 
         return GetContentInformation(contentInformation);
     }
@@ -57,15 +78,15 @@ public class Schedule {
         if (contentInformation.getNextContent() == null) {
             contentInformation.setNextContent(GetEmptyContent());
         }
+
         return contentInformation;
     }
 
-    private Content GetEmptyContent() {
-        return new Content();
-    }
+    private Content GetEmptyContent() { return new Content(); }
 
-    private boolean isInContentTime(LocalTime time, LocalTime startTime, LocalTime endTime) {
-        return (time.isAfter(startTime) && time.isBefore(endTime)) || time.equals(startTime) || time.equals(endTime);
+    private boolean isInContentTime(LocalTime time, ContentInSchedule content) {
+        return (time.isAfter(content.getStartTime()) && time.isBefore(content.getEndTime())) ||
+                time.equals(content.getStartTime()) || time.equals(content.getEndTime());
     }
 
     public LocalTime getEndTime(LocalTime startTime, Content content) {
@@ -78,5 +99,9 @@ public class Schedule {
         }
         return endTime;
     }
+
     // Edit and Delete
+    public void deleteTime(String timeString) { timeTable.remove(timeString); }
+
+    public void saveContentInTime(String timeString, Content content) { timeTable.put(timeString, content); }
 }
