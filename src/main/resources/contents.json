@@ -1,0 +1,72 @@
+[
+  {
+    "schedule": "schedule 1",
+    "contentType": "static content",
+    "title": "Maraton South park",
+    "description": "Aventuras de 4 amigos que van a la escuela",
+    "duration": 360,
+    "hoursStart": 0,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 1",
+    "contentType": "static content",
+    "title": "Maraton Casa de los dibujos",
+    "description": "Reality show de caricaturas que viven en una misma casa",
+    "duration": 180,
+    "hoursStart": 6,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 1",
+    "contentType": "static content",
+    "title": "Maraton vecinos",
+    "description": "Aventuras de varias familias que viven en un mismo edificio",
+    "duration": 240,
+    "hoursStart": 9,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 1",
+    "contentType": "static content",
+    "title": "Maraton Familia Peluche",
+    "description": "Aventuras de una familia que vive en la ciudad peluche",
+    "duration": 240,
+    "hoursStart": 13,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 1",
+    "contentType": "live content",
+    "title": "Maraton Duelo de comediantes",
+    "description": "Transmision de enfrentamiento de comediantes con sus mejores chistes",
+    "duration": 420,
+    "hoursStart": 17,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 2",
+    "contentType": "static content",
+    "title": "Maraton Nosostros los guapos",
+    "description": "Aventuras de dos amigos que buscan trabajo",
+    "duration": 360,
+    "hoursStart": 0,
+    "minutesStart": 0,
+    "secondsStart": 0
+  },
+  {
+    "schedule": "schedule 2",
+    "contentType": "static content",
+    "title": "Maraton Principe del rap",
+    "description": "Aventuras de un joven que se muda con su tio",
+    "duration": 180,
+    "hoursStart": 14,
+    "minutesStart": 0,
+    "secondsStart": 0
+  }
+]
