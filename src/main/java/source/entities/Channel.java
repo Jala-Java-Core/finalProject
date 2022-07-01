@@ -62,6 +62,13 @@ public class Channel {
         return contentInformation;
     }
 
+    public void deleteSchedule(Schedule schedule) {
+        for (Guide guide: getGuides()) {
+            guide.deleteScheduleInGuide(schedule);
+        }
+        schedules.remove(schedule);
+    }
+
     private Guide GetGuideBasedOnDate(LocalDate date){
         Guide guideBasedOnDate = null;
         for (Guide guide: getGuides()) {

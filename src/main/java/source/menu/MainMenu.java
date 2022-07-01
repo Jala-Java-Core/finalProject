@@ -9,12 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MainMenu {
-
-    private String option = null;
 
     public void showMainMenu() throws IOException {
         ContentManager contentManager = Example.GetContentManager();
@@ -27,8 +24,8 @@ public class MainMenu {
         System.out.println("5. Preview based on channel, time and date");
         System.out.println("6. Exit");
         System.out.print("Select option: ");
-        option = "";
-        String channelString = "";
+        String option = "";
+        String channelString;
         while(!option.equals("6")) {
             if (in.hasNextLine()) {
                 option = in.nextLine();
@@ -67,11 +64,11 @@ public class MainMenu {
                     System.out.println(contentManager.getPreview(channelString, dateString, timeString));
                     this.selectOption(option);
                     break;
-                default: break;
+                default:
+                    this.selectOption(option);
+                    break;
             }
         }
-
-        return;
     }
 
     public void selectOption(String option) throws IOException {

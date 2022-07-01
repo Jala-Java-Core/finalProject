@@ -84,17 +84,23 @@ public class Example {
         Guide programmedGuideAnnually = new Guide(seasonAnnually);
         programmedGuideAnnually.saveRecurringSchedule(scheduleSony1, DayOfWeek.FRIDAY);
 
-        Season seasonWeekJuly = new Season(ScheduleType.WEEKLY, "2022-07-01");
+        Season seasonWeekJuly = new Season(ScheduleType.WEEKLY, "2022-07-13");
         Guide programmedGuideWeekly = new Guide(seasonWeekJuly);
         LinkedHashSet<String> datesInScheduleSony2 = new LinkedHashSet<>(){};
         datesInScheduleSony2.add("2022-07-02");
         datesInScheduleSony2.add("2022-07-03");
         datesInScheduleSony2.add("2022-07-15");
-        //programmedGuideWeekly.saveRepeatedSchedule(scheduleSony2, datesInScheduleSony2);
-        //programmedGuideAnnually.saveRepeatedSchedule(scheduleSony2, datesInScheduleSony2);
+        programmedGuideAnnually.saveRepeatedSchedule(scheduleSony2, datesInScheduleSony2);
+
+        LinkedHashSet<String> datesInScheduleSony3 = new LinkedHashSet<>(){};
+        datesInScheduleSony3.add("2022-07-16");
+
+        Schedule scheduleSony3 = new Schedule(timeTableScheduleSony2);
+        programmedGuideWeekly.saveRepeatedSchedule(scheduleSony3, datesInScheduleSony3);
 
         sonyTvChannel.saveSchedule(scheduleSony1);
         sonyTvChannel.saveSchedule(scheduleSony2);
+        sonyTvChannel.saveSchedule(scheduleSony3);
 
         sonyTvChannel.saveGuide(programmedGuideAnnually);
         sonyTvChannel.saveGuide(programmedGuideWeekly);
@@ -103,8 +109,6 @@ public class Example {
         contentManager.createChannel(geoTvChannel);
         contentManager.createChannel(sonyTvChannel);
 
-        String test = contentManager.getPreview("Sony TV", "2022-07-02", "11:05:00");
-        //System.out.println(test);
         return contentManager;
     }
 }

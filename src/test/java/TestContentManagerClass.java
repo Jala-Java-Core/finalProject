@@ -1,5 +1,4 @@
 import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import source.ContentManager;
 import source.entities.*;
@@ -29,7 +28,7 @@ public class TestContentManagerClass {
     // Channel
     Channel geoTvChannel;
 
-    @Before
+    @BeforeEach
     public void setup() {
         // Content
         dollyDarling = new PreRecorded("Dolly Darling", "Summary of Dolly Darling", 60);
@@ -49,7 +48,16 @@ public class TestContentManagerClass {
         programmedGuideMonthly.saveRecurringSchedule(schedule, DayOfWeek.FRIDAY);
         // Channel
         geoTvChannel  = new Channel("Geo TV");
+
         geoTvChannel.saveGuide(programmedGuideMonthly);
+
+        geoTvChannel.saveSchedule(schedule);
+
+        geoTvChannel.saveContent(dollyDarling);
+        geoTvChannel.saveContent(littleSunshine);
+        geoTvChannel.saveContent(liveStream);
+        geoTvChannel.saveContent(masterChef);
+        geoTvChannel.saveContent(newsAbc);
         // Content Manager
         contentManager = new ContentManager();
         contentManager.createChannel(geoTvChannel);
@@ -71,7 +79,6 @@ public class TestContentManagerClass {
 
     @Test
     public void nonExistingDateInSchedule() {
-        setup();
         String dateInString = "2022-07-07"; // Saturday
         String timeInString = "11:45:00";
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -82,7 +89,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithPreviousCurrentNext() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "11:45:00"; // previous valid, content valid, next valid
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -93,7 +99,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithPrevious() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "23:50:00"; // previous valid, content empty, next empty
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -104,7 +109,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithPreviousCurrent() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "13:50:00"; // previous valid, content valid, next empty
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -115,7 +119,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithPreviousNext() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "15:30:00"; // previous valid, content empty, next valid
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -126,7 +129,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithCurrent() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "18:30:00"; // previous empty, content valid, next empty
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -137,7 +139,6 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithCurrentNoPrevious() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "00:50:00"; // previous empty, content valid, next empty
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
@@ -148,12 +149,61 @@ public class TestContentManagerClass {
 
     @Test
     public void existingDateWithCurrentNext() {
-        setup();
         String dateInString = "2022-07-08";
         String timeInString = "08:50:00"; // previous empty, content valid, next valid
         ContentInformation contentInformation = contentManager.preview(geoTvChannel, dateInString, timeInString);
         assertEquals("Previous: ", contentInformation.getPreviousToString());
         assertEquals(littleSunshine, contentInformation.getCurrent().getContent());
         assertEquals(masterChef, contentInformation.getNext().getContent());
+    }
+
+    // Exceptions
+    @Test
+    public void nonExistingChannel() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> contentManager.getGuidesBasedOnChannelToString("Non Existing TV"));
+    }
+
+    @Test
+    public void outRangeDurationContentLessThanMinimum30() {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            Content contentWithDurationLessThan30 = new PreRecorded("Sports ABC", "Summary of Sports ABC", 29);
+            contentManager.getChannelBasedOnName("Geo TV").saveContent(contentWithDurationLessThan30);
+        });
+    }
+
+    @Test
+    public void outRangeDurationContentGreaterThanMaximum1440() {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            Content contentWithDurationGreaterThan1440 = new PreRecorded("Sports ABC", "Summary of Sports ABC", 1441);
+            contentManager.getChannelBasedOnName("Geo TV").saveContent(contentWithDurationGreaterThan1440);
+        });
+    }
+
+    @Test
+    public void saveContentInSchedule() {
+        assertEquals(7, schedule.getTimeTable().size());
+        schedule.saveContentInTime("20:00:00", liveStream);
+        assertEquals(8, schedule.getTimeTable().size());
+    }
+
+    @Test
+    public void deleteContentInSchedule() {
+        String tenPm = "22:00:00";
+        schedule.saveContentInTime(tenPm, liveStream);
+        assertEquals(8, schedule.getTimeTable().size());
+        schedule.deleteTime(tenPm);
+        assertEquals(7, schedule.getTimeTable().size());
+    }
+
+    @Test
+    public void deleteSchedule() {
+        assertEquals(1, geoTvChannel.getSchedules().size());
+        TreeMap<String, Content> timeTableToDeleteSchedule = new TreeMap<>();
+        Schedule scheduleToDelete = new Schedule(timeTableToDeleteSchedule);
+        scheduleToDelete.saveContentInTime("20:00:00", liveStream);
+        geoTvChannel.saveSchedule(scheduleToDelete);
+        assertEquals(2, geoTvChannel.getSchedules().size());
+        geoTvChannel.deleteSchedule(scheduleToDelete);
+        assertEquals(1, geoTvChannel.getSchedules().size());
     }
 }

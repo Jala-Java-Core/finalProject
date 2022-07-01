@@ -47,7 +47,7 @@ public class ContentManager {
     public String getChannelsToString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Channel channel:getChannels()) {
-            stringBuilder.append(channel.getChannelName() + "\n");
+            stringBuilder.append(channel.getChannelName()).append("\n");
         }
         return stringBuilder.toString();
     }
@@ -57,11 +57,12 @@ public class ContentManager {
         StringBuilder stringBuilder = new StringBuilder();
         int index = 1;
         for (Schedule schedule : channel.getSchedules()) {
-            stringBuilder.append("Schedule " + index + ": \n");
+            stringBuilder.append("Schedule ").append(index).append(": \n");
             for (Map.Entry<String, Content> entry : schedule.getTimeTable().entrySet()) {
                 LocalTime startTime = LocalTime.parse(entry.getKey(), DateTimeFormatter.ISO_TIME);
-                stringBuilder.append("Start Time: " + entry.getKey() + " - End Time: " + schedule.getEndTime(startTime, entry.getValue())
-                        + " - Content Title: " + entry.getValue().getTitle() + "\n");
+                stringBuilder.append("Start Time: ").append(entry.getKey()).append(" - End Time: ")
+                        .append(schedule.getEndTime(startTime, entry.getValue())).append(" - Content Title: ")
+                        .append(entry.getValue().getTitle()).append("\n");
             }
             index++;
         }
@@ -72,9 +73,9 @@ public class ContentManager {
         StringBuilder stringBuilder = new StringBuilder();
         int indexGuide = 1, indexSchedule = 1;
         for (Guide guide : channel.getGuides()) {
-            stringBuilder.append("Guide " + indexGuide + ": \n");
+            stringBuilder.append("Guide ").append(indexGuide).append(": \n");
             for (Map.Entry<Schedule, LinkedHashSet<LocalDate>> entry : guide.getScheduleWithDateAssociated().entrySet()) {
-                stringBuilder.append("Schedule " + indexSchedule + " - Dates: " + entry.getValue().toString() + "\n");
+                stringBuilder.append("Schedule ").append(indexSchedule).append(" - Dates: ").append(entry.getValue().toString()).append("\n");
                 indexSchedule++;
             }
             indexGuide++;
@@ -86,12 +87,12 @@ public class ContentManager {
         Channel channel = getChannelBasedOnName(channelString);
         StringBuilder stringBuilder = new StringBuilder();
         for (Content content : channel.getContents()) {
-            stringBuilder.append("Title: " + content.getTitle() + " - Duration in Minutes: " + content.getDurationInMinutes() + "\n");
+            stringBuilder.append("Title: ").append(content.getTitle()).append(" - Duration in Minutes: ").append(content.getDurationInMinutes()).append("\n");
         }
         return stringBuilder.toString();
     }
 
-    private Channel getChannelBasedOnName(String channelString) {
+    public Channel getChannelBasedOnName(String channelString) {
         Channel channel = null;
         for (Channel c: getChannels()) {
             if(channelString.equals(c.getChannelName())) {
@@ -109,12 +110,12 @@ public class ContentManager {
         Channel channel = getChannelBasedOnName(channelString);
         StringBuilder stringBuilder = new StringBuilder();
         ContentInformation contentInformation = preview(channel, dateString, timeString);
-        stringBuilder.append(contentInformation.getTitleToString() + "\n");
-        stringBuilder.append(contentInformation.getSummaryToString() + "\n");
-        stringBuilder.append(contentInformation.getDurationToString() + "\n");
-        stringBuilder.append(contentInformation.getRemainingToString() + "\n");
-        stringBuilder.append(contentInformation.getPreviousToString() + "\n");
-        stringBuilder.append(contentInformation.getNextToString() + "\n");
+        stringBuilder.append(contentInformation.getTitleToString()).append("\n");
+        stringBuilder.append(contentInformation.getSummaryToString()).append("\n");
+        stringBuilder.append(contentInformation.getDurationToString()).append("\n");
+        stringBuilder.append(contentInformation.getRemainingToString()).append("\n");
+        stringBuilder.append(contentInformation.getPreviousToString()).append("\n");
+        stringBuilder.append(contentInformation.getNextToString()).append("\n");
 
         return  stringBuilder.toString();
     }

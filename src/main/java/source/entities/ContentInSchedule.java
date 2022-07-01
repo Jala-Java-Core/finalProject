@@ -5,7 +5,7 @@ import java.time.LocalTime;
 public class ContentInSchedule {
     private LocalTime startTime;
     private LocalTime endTime;
-    private Content content;
+    private final Content content;
 
     public ContentInSchedule() {
         this.content = GetEmptyContent();

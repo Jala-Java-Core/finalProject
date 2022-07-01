@@ -32,7 +32,7 @@ public class Content {
 
     private void ValidateDurationInMinutes(int durationInMinutes) {
         if (durationInMinutes < MINIMUM_TIME || durationInMinutes > MAXIMUM_TIME) {
-            throw new IllegalArgumentException("Duration in minutes should be greater or equal than " + MINIMUM_TIME + " or less or equal than " + MAXIMUM_TIME);
+            throw new IllegalStateException("Duration in minutes should be greater or equal than " + MINIMUM_TIME + " or less or equal than " + MAXIMUM_TIME);
         }
     }
 }
