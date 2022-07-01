@@ -29,60 +29,41 @@ public class Schedule {
                 content = current;
             }
 
-            if (previous != null) {
-                if (previous.getStartTime() != null && previous.getEndTime().isBefore(time) && content == null) {
-                    if (isInContentTime(startTime.minusMinutes(1), previous))
-                        previousToContent = current;
-                }
+            if (endTime.isBefore(time) && content == null) {
+                previousToContent = current;
+            }
 
-                if (previous.getStartTime() != null && startTime.isAfter(time) && nextToContent == null) {
-                     nextToContent = current;
-                }
+            if (previous != null && startTime.isAfter(time) && nextToContent == null) {
+                 nextToContent = current;
             }
             previous = current;
         }
 
-        return GetContentInformation(previousToContent, content, nextToContent, time);
+        return getContentInformation(previousToContent, content, nextToContent, time);
     }
 
-    private ContentInformation GetContentInformation(ContentInSchedule previousToContent, ContentInSchedule content,
+    private ContentInformation getContentInformation(ContentInSchedule previousToContent, ContentInSchedule content,
                                                      ContentInSchedule nextToContent, LocalTime time) {
         ContentInformation contentInformation = new ContentInformation();
         if (content != null && content.getContent() != null) {
-            contentInformation.setContent(content.getContent());
+            contentInformation.setContent(content);
             contentInformation.setTimeRemaining(time, content.getEndTime());
         }
 
         if (content != null && content.getContent() != null && previousToContent != null && !isInContentTime(content.getStartTime().minusMinutes(1), previousToContent)) {
-            contentInformation.setPreviousContent(GetEmptyContent());
+            contentInformation.setPreviousContent(new ContentInSchedule());
         } else if (previousToContent != null) {
-            contentInformation.setPreviousContent(previousToContent.getContent());
+            contentInformation.setPreviousContent(previousToContent);
         }
 
         if (content != null && content.getContent() != null && nextToContent != null && !isInContentTime(content.getEndTime().plusMinutes(1), nextToContent)) {
-            contentInformation.setNextContent(GetEmptyContent());
+            contentInformation.setNextContent(new ContentInSchedule());
         } else if (nextToContent != null) {
-            contentInformation.setNextContent(nextToContent.getContent());
-        }
-
-        return GetContentInformation(contentInformation);
-    }
-
-    private ContentInformation GetContentInformation(ContentInformation contentInformation) {
-        if (contentInformation.getContent() == null) {
-            contentInformation.setContent(GetEmptyContent());
-        }
-        if (contentInformation.getPreviousContent() == null) {
-            contentInformation.setPreviousContent(GetEmptyContent());
-        }
-        if (contentInformation.getNextContent() == null) {
-            contentInformation.setNextContent(GetEmptyContent());
+            contentInformation.setNextContent(nextToContent);
         }
 
         return contentInformation;
     }
-
-    private Content GetEmptyContent() { return new Content(); }
 
     private boolean isInContentTime(LocalTime time, ContentInSchedule content) {
         return (time.isAfter(content.getStartTime()) && time.isBefore(content.getEndTime())) ||
@@ -97,7 +78,7 @@ public class Schedule {
         } else {
             endTime = startTime.plusMinutes(content.getDurationInMinutes());
         }
-        return endTime;
+        return endTime.minusMinutes(1);
     }
 
     // Edit and Delete

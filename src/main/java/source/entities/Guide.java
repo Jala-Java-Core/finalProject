@@ -28,7 +28,7 @@ public class Guide {
 
         for (String dateString: datesString) {
             LocalDate date = LocalDate.parse(dateString, Helper.formatterDate);
-            if (IsDateInSeason(date)) {
+            if (isDateInSeason(date)) {
                 dates.add(date);
             }
         }
@@ -49,21 +49,21 @@ public class Guide {
     public void deleteScheduleInGuide(Schedule schedule) { scheduleWithDateAssociated.remove(schedule); }
 
     // Helper Methods
-    public Schedule GetScheduleBasedOnDate(LocalDate date) {
+    public Schedule getScheduleBasedOnDate(LocalDate date) {
         for(Map.Entry<Schedule, LinkedHashSet<LocalDate>> scheduleWithDate: getScheduleWithDateAssociated().entrySet()) {
-            if (IsDateInSchedule(date, scheduleWithDate.getValue())) {
+            if (isDateInSchedule(date, scheduleWithDate.getValue())) {
                 return scheduleWithDate.getKey();
             }
         }
         return null;
     }
 
-    public boolean IsDateInSeason(LocalDate date) {
+    public boolean isDateInSeason(LocalDate date) {
         return (date.isAfter(season.getStartDate()) && date.isBefore(season.getEndDate())) ||
                 date.equals(season.getStartDate()) || date.equals(season.getEndDate());
     }
 
-    private boolean IsDateInSchedule(LocalDate date, LinkedHashSet<LocalDate> dates) {
+    private boolean isDateInSchedule(LocalDate date, LinkedHashSet<LocalDate> dates) {
         boolean isDateInSchedule = false;
         for (LocalDate dateInSchedule: dates) {
             if (dateInSchedule.isEqual(date)) {

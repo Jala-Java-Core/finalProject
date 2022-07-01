@@ -7,6 +7,10 @@ public class ContentInSchedule {
     private LocalTime endTime;
     private Content content;
 
+    public ContentInSchedule() {
+        this.content = GetEmptyContent();
+    }
+
     public ContentInSchedule(LocalTime startTime, LocalTime endTime, Content content) {
         this.startTime = startTime;
         this.endTime = endTime;
@@ -17,11 +21,5 @@ public class ContentInSchedule {
     public LocalTime getStartTime() { return startTime; }
     public LocalTime getEndTime() { return endTime; }
 
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
+    private Content GetEmptyContent() { return new Content(); }
 }

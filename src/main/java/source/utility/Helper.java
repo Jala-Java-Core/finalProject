@@ -3,7 +3,7 @@ package source.utility;
 import java.time.format.DateTimeFormatter;
 
 public class Helper {
-    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static void ValidateStringIsNullOrEmpty(String name, String value) {
