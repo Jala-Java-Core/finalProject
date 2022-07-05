@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EntertainmentTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-07-05T04:08:18" hostname="DMONTANOV-DH01" time="0.008">
+  <properties/>
+  <testcase name="getPreview" classname="EntertainmentTest" time="0.008"/>
+  <system-out><![CDATA[Title: BBC Duration: 01:00 Previous: ESPN(19:00 - 20:00) Next: Movie City (21:00 - 23:00) Summary: Europa news
+Title: BBC Duration: 01:00 Previous: ESPN(19:00 - 20:00) Next: Movie City (21:00 - 23:00) Summary: Europa news
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
